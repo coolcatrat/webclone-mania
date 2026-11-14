@@ -345,6 +345,16 @@ img { display: block; max-width: 100%; }
   .desktop-nav-slot .nav-item > span:last-child { display: none; }
 }
 
+/* ---------- Footer notice ---------- */
+.site-foot {
+  position: relative; z-index: 10;
+  margin-top: clamp(40px, 5vw, 72px); padding-top: 20px;
+  border-top: 1px solid var(--line);
+  display: grid; gap: 4px; text-align: center;
+  font-size: 12px; line-height: 1.5; color: var(--ink-soft);
+}
+.site-foot a { color: var(--brand); text-decoration: underline; text-underline-offset: 2px; }
+
 /* ---------- Overlays (search, cart) ---------- */
 .overlay { position: fixed; inset: 0; z-index: 60; }
 .overlay__backdrop { position: absolute; inset: 0; background: rgba(20, 12, 36, .5); opacity: 0; transition: opacity .25s; }
