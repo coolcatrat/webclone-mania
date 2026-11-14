@@ -46,6 +46,7 @@
 
   // ---------- Section renderers ----------
   const timers = [];
+  const resizeHooks = [];
 
   function renderBanner(sec) {
     const wrap = el("section", "banner");
@@ -54,31 +55,52 @@
     sec.slides.forEach((src, i) => {
       const slide = el("div", "banner__slide");
       const img = el("img");
-      img.src = src; img.alt = ""; img.loading = i === 0 ? "eager" : "lazy";
+      img.src = src; img.alt = ""; img.loading = i < 3 ? "eager" : "lazy";
       markLoaded(img);
       slide.appendChild(img);
       track.appendChild(slide);
-      dots.appendChild(el("span", i === 0 ? "is-active" : ""));
     });
     wrap.append(track, dots);
 
+    // Slides per view comes from CSS (1 on phones, 2 on tablet, 3 on desktop).
+    const slideStep = () => {
+      const [a, b] = track.children;
+      return b ? b.offsetLeft - a.offsetLeft : track.clientWidth;
+    };
+    const positions = () => {
+      const perView = Math.max(1, Math.round(track.clientWidth / slideStep()));
+      return Math.max(1, sec.slides.length - perView + 1);
+    };
     let idx = 0;
+    let count = 0;
+    const buildDots = () => {
+      const n = positions();
+      if (n === count) return;
+      count = n;
+      dots.innerHTML = "";
+      if (n > 1) for (let i = 0; i < n; i++) dots.appendChild(el("span"));
+      idx = Math.min(idx, n - 1);
+      setDot(idx);
+    };
     const setDot = (i) => [...dots.children].forEach((d, j) => d.classList.toggle("is-active", j === i));
+    requestAnimationFrame(buildDots);
+    resizeHooks.push(buildDots);
+
     track.addEventListener("scroll", () => {
-      const i = Math.round(track.scrollLeft / track.clientWidth);
+      const i = Math.min(count - 1, Math.round(track.scrollLeft / slideStep()));
       if (i !== idx) { idx = i; setDot(i); }
     }, { passive: true });
 
     if (sec.slides.length > 1) {
       let paused = false;
-      wrap.addEventListener("pointerenter", () => (paused = true));
+      wrap.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") paused = true; });
       wrap.addEventListener("pointerleave", () => (paused = false));
       wrap.addEventListener("touchstart", () => (paused = true), { passive: true });
       wrap.addEventListener("touchend", () => setTimeout(() => (paused = false), 3000), { passive: true });
       timers.push(setInterval(() => {
-        if (paused || document.hidden) return;
-        const next = (idx + 1) % sec.slides.length;
-        track.scrollTo({ left: next * track.clientWidth, behavior: next === 0 ? "auto" : "smooth" });
+        if (paused || document.hidden || count < 2) return;
+        const next = (idx + 1) % count;
+        track.scrollTo({ left: next * slideStep(), behavior: next === 0 ? "auto" : "smooth" });
       }, (sec.rot || 5) * 1000));
     }
     return wrap;
@@ -125,7 +147,26 @@
     s.innerHTML = `<div class="row-head"><h3>${esc(sec.title)}</h3><button class="view-more">View more <b>&gt;</b></button></div>`;
     const row = el("div", "row scroll-x");
     sec.products.forEach((p) => row.appendChild(productCard(p)));
-    s.appendChild(row);
+
+    // Prev/next arrows (only shown on desktop via CSS)
+    const wrap = el("div", "row-wrap");
+    const prev = el("button", "row-arrow row-arrow--prev", `<svg viewBox="0 0 24 24" class="ic"><path d="m15 18-6-6 6-6"/></svg>`);
+    const next = el("button", "row-arrow row-arrow--next", CHEVRON);
+    prev.setAttribute("aria-label", "Scroll left");
+    next.setAttribute("aria-label", "Scroll right");
+    const page = (dir) => row.scrollBy({ left: dir * row.clientWidth * 0.8, behavior: "smooth" });
+    prev.addEventListener("click", () => page(-1));
+    next.addEventListener("click", () => page(1));
+    const syncArrows = () => {
+      prev.disabled = row.scrollLeft <= 2;
+      next.disabled = row.scrollLeft + row.clientWidth >= row.scrollWidth - 2;
+    };
+    row.addEventListener("scroll", syncArrows, { passive: true });
+    requestAnimationFrame(syncArrows);
+    resizeHooks.push(syncArrows);
+
+    wrap.append(prev, row, next);
+    s.appendChild(wrap);
     return s;
   }
 
@@ -182,9 +223,16 @@
     tabsEl.appendChild(b);
   });
 
+  let pillPlaced = false;
   function movePill(btn) {
+    if (!pillPlaced) pill.style.transition = "none";
     pill.style.width = btn.offsetWidth + "px";
     pill.style.transform = `translateX(${btn.offsetLeft}px)`;
+    if (!pillPlaced) {
+      pill.offsetWidth; // flush so the first placement doesn't animate
+      pill.style.transition = "";
+      pillPlaced = true;
+    }
   }
 
   function selectTab(i) {
@@ -202,6 +250,7 @@
     });
 
     timers.splice(0).forEach(clearInterval);
+    resizeHooks.length = 0;
     content.innerHTML = "";
     const frag = document.createDocumentFragment();
     tab.sections.forEach((sec) => {
@@ -213,16 +262,35 @@
     store.set("parqis-tab", i);
   }
 
-  window.addEventListener("resize", () => {
-    const active = tabsEl.querySelector(".tab.is-active");
-    if (active) movePill(active);
-  });
-
   // ---------- Header height → aligns the festive background seam ----------
   const header = $("#header");
   const syncHeader = () => document.documentElement.style.setProperty("--header-h", header.offsetHeight + "px");
   syncHeader();
   window.addEventListener("resize", syncHeader);
+
+  // ---------- Move the bottom nav into the header on desktop ----------
+  const nav = $(".bottom-nav");
+  const navHome = nav.parentNode;
+  const navSlot = $("#desktopNavSlot");
+  const desktopMQ = window.matchMedia("(min-width: 1024px)");
+  const placeNav = () => {
+    if (desktopMQ.matches) navSlot.appendChild(nav);
+    else navHome.insertBefore(nav, $("#toast"));
+  };
+  placeNav();
+  syncHeader();
+  desktopMQ.addEventListener("change", () => { placeNav(); syncHeader(); });
+
+  let resizeRaf;
+  window.addEventListener("resize", () => {
+    cancelAnimationFrame(resizeRaf);
+    resizeRaf = requestAnimationFrame(() => {
+      const active = tabsEl.querySelector(".tab.is-active");
+      if (active) movePill(active);
+      resizeHooks.forEach((fn) => fn());
+    });
+  });
+
 
   // ---------- Misc no-op links ----------
   $("#searchBtn").addEventListener("click", () => toast("Search is not part of this clone"));

@@ -20,7 +20,11 @@ Product data, banners and images are real: `data.js` is a snapshot of the site's
 python -m http.server 5173
 ```
 
-Then open http://localhost:5173 (best viewed at phone width).
+Then open http://localhost:5173. The layout adapts from small phones up to wide desktops:
+
+- **Phone (under 768px):** the original single-column mobile design with the floating bottom nav
+- **Tablet (768px+):** full-width, larger cards, two banners per view, three-up trends grid
+- **Desktop (1024px+):** nav moves into the header beside the search bar, three banners per view, arrow buttons on product rows
 
 ### Refresh the data
 

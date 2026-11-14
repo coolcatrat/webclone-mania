@@ -17,15 +17,14 @@
   <div class="app">
     <!-- Sticky header -->
     <header class="header" id="header">
-      <div class="festive-bg festive-bg--header" aria-hidden="true">
-        <img src="assets/festive-header-bg.png" srcset="assets/festive-header-bg.png 1x, assets/festive-header-bg@2x.png 2x" alt="" draggable="false" />
-      </div>
+      <div class="festive-bg festive-bg--header" aria-hidden="true"></div>
       <div class="header__row">
         <button type="button" class="address-btn" aria-label="Select delivery address">
           <svg viewBox="0 0 24 24" class="ic"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
           <span class="truncate">Select an address</span>
           <svg viewBox="0 0 24 24" class="ic"><path d="m6 9 6 6 6-6"/></svg>
         </button>
+        <div class="desktop-nav-slot" id="desktopNavSlot"></div>
         <div class="header__icons">
           <a href="#wishlist" class="icon-link" aria-label="Wishlist"><img src="assets/home-like.svg" alt="Wishlist" width="19" height="19" /><span class="dot-badge" id="wishBadge" hidden></span></a>
           <a href="#profile" class="icon-link" aria-label="Profile"><img src="assets/home-user.svg" alt="User" width="21" height="21" /></a>
@@ -38,9 +37,7 @@
     </header>
 
     <div class="page">
-      <div class="festive-bg festive-bg--page" aria-hidden="true">
-        <img src="assets/festive-header-bg.png" srcset="assets/festive-header-bg.png 1x, assets/festive-header-bg@2x.png 2x" alt="" draggable="false" />
-      </div>
+      <div class="festive-bg festive-bg--page" aria-hidden="true"></div>
 
       <!-- Main category tabs + subcategory bubbles -->
       <div class="top">
