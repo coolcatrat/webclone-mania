@@ -2,7 +2,9 @@
 
 ## Parqis homepage clone
 
-A static HTML/CSS/JS recreation of the [parqis.com](https://parqis.com/) mobile storefront homepage.
+A static HTML/CSS/JS recreation of the [parqis.com](https://parqis.com/) storefront homepage.
+
+**Live site:** https://coolcatrat.github.io/webclone-mania/ (deployed with GitHub Pages from `main`; every push redeploys it)
 
 **What's in it**
 - Festive header with address, search, wishlist and profile; the light-string artwork tiles across any screen width
