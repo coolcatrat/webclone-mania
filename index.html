@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#23143E" />
+  <title>Online Shopping &amp; Entertainment - PARQIS</title>
+  <meta name="description" content="Parqis social commerce web" />
+  <link rel="icon" href="assets/favicon.ico" />
+  <link rel="apple-touch-icon" href="assets/icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- Sticky header -->
+    <header class="header" id="header">
+      <div class="festive-bg festive-bg--header" aria-hidden="true">
+        <img src="assets/festive-header-bg.png" srcset="assets/festive-header-bg.png 1x, assets/festive-header-bg@2x.png 2x" alt="" draggable="false" />
+      </div>
+      <div class="header__row">
+        <button type="button" class="address-btn" aria-label="Select delivery address">
+          <svg viewBox="0 0 24 24" class="ic"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
+          <span class="truncate">Select an address</span>
+          <svg viewBox="0 0 24 24" class="ic"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="header__icons">
+          <a href="#wishlist" class="icon-link" aria-label="Wishlist"><img src="assets/home-like.svg" alt="Wishlist" width="19" height="19" /><span class="dot-badge" id="wishBadge" hidden></span></a>
+          <a href="#profile" class="icon-link" aria-label="Profile"><img src="assets/home-user.svg" alt="User" width="21" height="21" /></a>
+        </div>
+      </div>
+      <button type="button" class="search-btn" id="searchBtn">
+        <svg viewBox="0 0 24 24" class="ic ic--sm"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+        <span>Search for products, creators...</span>
+      </button>
+    </header>
+
+    <div class="page">
+      <div class="festive-bg festive-bg--page" aria-hidden="true">
+        <img src="assets/festive-header-bg.png" srcset="assets/festive-header-bg.png 1x, assets/festive-header-bg@2x.png 2x" alt="" draggable="false" />
+      </div>
+
+      <!-- Main category tabs + subcategory bubbles -->
+      <div class="top">
+        <div class="tabs scroll-x" id="tabs">
+          <div class="tabs__pill" id="tabPill"></div>
+        </div>
+        <div class="subs scroll-x" id="subs"></div>
+      </div>
+
+      <main class="content" id="content"></main>
+    </div>
+
+    <!-- Floating bottom nav -->
+    <nav class="bottom-nav">
+      <a href="#" class="nav-item is-active">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path fill="currentColor" d="M8.97667 2.24011C9.25004 2.02744 9.58287 1.90522 9.92891 1.89044C10.2749 1.87565 10.617 1.96904 10.9075 2.15761L11.0233 2.24095L18.01 7.67428C18.6108 8.14178 18.3183 9.08428 17.5942 9.16178L17.4975 9.16678H16.6667V15.8334C16.6668 16.2539 16.508 16.6589 16.2221 16.9672C15.9362 17.2756 15.5443 17.4644 15.125 17.4959L15 17.5001H5C4.57966 17.5 4.17488 17.3411 3.86674 17.0553C3.5586 16.7694 3.36986 16.3776 3.33833 15.9584L3.33333 15.8334V9.16678H2.5025C1.74167 9.16678 1.3925 8.24345 1.91667 7.73761L1.99 7.67428L8.97667 2.24011ZM10 3.55595L4.6875 7.68761C4.87833 7.84178 5 8.07761 5 8.34178V15.8334H7.5V11.6668C7.5 11.0037 7.76339 10.3679 8.23223 9.89901C8.70107 9.43017 9.33696 9.16678 10 9.16678C10.663 9.16678 11.2989 9.43017 11.7678 9.89901C12.2366 10.3679 12.5 11.0037 12.5 11.6668V15.8334H15V8.34178C15 8.07761 15.1217 7.84178 15.3125 7.68761L10 3.55595ZM10 10.8334C9.77899 10.8334 9.56703 10.9212 9.41075 11.0775C9.25447 11.2338 9.16667 11.4458 9.16667 11.6668V15.8334H10.8333V11.6668C10.8333 11.4458 10.7455 11.2338 10.5893 11.0775C10.433 10.9212 10.221 10.8334 10 10.8334Z"/></svg>
+        <span>Home</span>
+      </a>
+      <a href="#trends" class="nav-item">
+        <svg width="20" height="20" viewBox="0 0 24 24" class="ic"><path d="M18.5 5.6A9 9 0 1 0 18.5 18.4"/><path d="M9.5 8.2v7.6a.6.6 0 0 0 .9.5l6-3.8a.6.6 0 0 0 0-1L10.4 7.7a.6.6 0 0 0-.9.5z"/></svg>
+        <span>Trends</span>
+      </a>
+      <a href="#categories" class="nav-item">
+        <svg width="20" height="20" viewBox="0 0 24 24" class="ic"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/><circle cx="17" cy="7" r="3.5"/></svg>
+        <span>Categories</span>
+      </a>
+      <a href="#cart" class="nav-item">
+        <span class="rel">
+          <svg width="20" height="20" viewBox="0 0 24 24" class="ic"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+          <span class="count-badge" id="cartBadge" hidden>0</span>
+        </span>
+        <span>Cart</span>
+      </a>
+    </nav>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </div>
+
+  <!-- Reel / video modal for the trends tiles -->
+  <div class="modal" id="videoModal" hidden>
+    <button class="modal__close" id="videoClose" aria-label="Close">&times;</button>
+    <video id="videoEl" playsinline controls loop></video>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
